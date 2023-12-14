@@ -4,6 +4,7 @@ import edu.cotarelo.dao.mysql.MySQLUsuarioDAO;
 import edu.cotarelo.dao.objects.UsuarioDAO;
 import edu.cotarelo.fonts.Fuentes;
 import edu.cotarelo.sistema.Sistema;
+import javax.naming.NamingException;
 import javax.swing.table.DefaultTableModel;
 
 public class Usuarios extends javax.swing.JPanel {
@@ -217,29 +218,51 @@ public class Usuarios extends javax.swing.JPanel {
     }//GEN-LAST:event_btn_addActionPerformed
 
     /**
-     * Método que se ejecuta al hacer clic en el botón de borrar usuarios. 
-     * Elimina los usuarios seleccionados de la base de datos y de la tabla de usuarios.
+     * Método que se ejecuta al hacer clic en el botón de borrar usuarios.
+     * Elimina los usuarios seleccionados de la base de datos y de la tabla de
+     * usuarios.
      *
      * @param evt Evento de acción generado al hacer clic en el botón.
      */
     private void btn_deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_deleteActionPerformed
         UsuarioDAO dao = new MySQLUsuarioDAO();
         DefaultTableModel model = (DefaultTableModel) tabla_usuarios.getModel();
-
-        // Se recorren las filas seleccionadas en la tabla de usuarios.
-        for (int i : tabla_usuarios.getSelectedRows()) {
-            try {
-                int userId = (int) tabla_usuarios.getValueAt(i, 0);  // Se obtiene el ID del usuario de la primera columna de la fila seleccionada.
-                dao.eliminar(userId);  // Se llama al método eliminar de UsuarioDAO para eliminar el usuario de la base de datos.
-                model.removeRow(i);  // Se elimina la fila correspondiente al usuario de la tabla.
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
+        // Mostrar mensaje de alerta
+        if (tabla_usuarios.getSelectedRows().length < 1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Debes seleccionar uno o más usuarios a eliminar.\n", "AVISO", javax.swing.JOptionPane.ERROR_MESSAGE);
+        } else {
+            // Se recorren las filas seleccionadas en la tabla de usuarios.
+            for (int i : tabla_usuarios.getSelectedRows()) {
+                try {
+                    int userId = (int) tabla_usuarios.getValueAt(i, 0);  // Se obtiene el ID del usuario de la primera columna de la fila seleccionada.
+                    dao.eliminar(userId);  // Se llama al método eliminar de UsuarioDAO para eliminar el usuario de la base de datos.
+                    model.removeRow(i);  // Se elimina la fila correspondiente al usuario de la tabla.
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
             }
         }
     }//GEN-LAST:event_btn_deleteActionPerformed
-
+    
+    /**
+     * Maneja el evento de clic en el botón de edición. Abre la interfaz de
+     * registro de usuario con los detalles del usuario seleccionado en la
+     * tabla.
+     *
+     * @param evt Objeto que representa el evento de acción.
+     */
     private void btn_editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editActionPerformed
-
+        if (tabla_usuarios.getSelectedRow() > -1) {
+            try {
+                int userId = (int) tabla_usuarios.getValueAt(tabla_usuarios.getSelectedRow(), 0);
+                UsuarioDAO dao = new MySQLUsuarioDAO();
+                Sistema.ShowJPanel(new RegistarUsuario(dao.getUsuarioById(userId)));
+            } catch (NamingException e) {
+                System.out.println(e.getMessage());
+            }
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Debes seleccionar el usuario a editar.\n", "AVISO", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btn_editActionPerformed
 
     private void btn_searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_searchActionPerformed

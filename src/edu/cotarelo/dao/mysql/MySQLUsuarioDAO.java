@@ -58,13 +58,6 @@ public class MySQLUsuarioDAO implements UsuarioDAO {
         return salida;
     }
 
-    /**
-     * Elimina un usuario de la base de datos.
-     *
-     * @param usuario El usuario a eliminar.
-     * @return 1 si se ha eliminado correctamente, -1 si hay un error.
-     * @throws NamingException Si hay un error en la nomenclatura.
-     */
     @Override
     public int borrar(Usuario usuario) throws NamingException {
         Integer salida = -1;
@@ -165,15 +158,6 @@ public class MySQLUsuarioDAO implements UsuarioDAO {
         return usuario;
     }
 
-    /**
-     * Obtiene un usuario por su nombre y contraseña.
-     *
-     * @param nombre El nombre de usuario.
-     * @param pass La contraseña del usuario.
-     * @return El usuario correspondiente a las credenciales o null si no se
-     * encuentra.
-     * @throws NamingException Si hay un error en la nomenclatura.
-     */
     @Override
     public Usuario getUsuarioByNombreContraseña(String nombre, String pass) throws NamingException {
         Usuario usuario = null;
@@ -203,13 +187,6 @@ public class MySQLUsuarioDAO implements UsuarioDAO {
         return usuario;
     }
 
-    /**
-     * Verifica si el usuario está en la base de datos.
-     *
-     * @param user El usuario a verificar.
-     * @return true si el usuario está en la base de datos, false de lo
-     * contrario.
-     */
     @Override
     public boolean estaUsuarioEnBBDD(Usuario user) {
         /* Verifica si el usuario está en la BBDD;utiliza el identificador y la contraseña (está en MD5 en el objeto) del usuario para la comparación
@@ -238,14 +215,6 @@ public class MySQLUsuarioDAO implements UsuarioDAO {
         return salida;
     }
 
-    /**
-     * Obtiene una lista de usuarios según el tipo especificado.
-     *
-     * @param tipo El tipo de usuarios a recuperar (1 para todos, 0 para
-     * administradores, otros para no administradores).
-     * @return La lista de usuarios.
-     * @throws ClassNotFoundException Si no se encuentra la clase.
-     */
     public ArrayList<Usuario> getListaUsuarios(int tipo) throws ClassNotFoundException {
         /**
          * recupera la lista de jugadores Todos los usuarios
@@ -291,15 +260,6 @@ public class MySQLUsuarioDAO implements UsuarioDAO {
         return lista;
     }
 
-    /**
-     * Obtiene una lista de usuarios en formato Hashtable según el tipo
-     * especificado.
-     *
-     * @param tipo El tipo de usuarios a recuperar (1 para todos, 0 para
-     * administradores, otros para no administradores).
-     * @return La lista de usuarios en formato Hashtable.
-     * @throws ClassNotFoundException Si no se encuentra la clase.
-     */
     public Hashtable<Integer, String> getListaUsuariosSelect(int tipo) throws ClassNotFoundException {
         /*	recupera la lista de jugadores
 		 * 	Todos | jugadores sinclub
@@ -342,14 +302,6 @@ public class MySQLUsuarioDAO implements UsuarioDAO {
         return lista;
     }
 
-    /**
-     * Verifica si la clave proporcionada es correcta para el usuario
-     * especificado.
-     *
-     * @param IdUser El ID del usuario.
-     * @param clave La clave a verificar.
-     * @return true si la clave es correcta, false de lo contrario.
-     */
     public boolean esClaveCorrecta(Integer IdUser, String clave) {
         boolean salida = false;
         Usuario elUser;
@@ -368,12 +320,7 @@ public class MySQLUsuarioDAO implements UsuarioDAO {
     }
 
     /*MÉTODOS AUXILIARES*/
-    /**
-     * Calcula el hash MD5 de una cadena de entrada.
-     *
-     * @param source La cadena de entrada.
-     * @return El hash MD5 de la cadena de entrada.
-     */
+
     private static String md5(String source) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
@@ -385,12 +332,6 @@ public class MySQLUsuarioDAO implements UsuarioDAO {
         }
     }
 
-    /**
-     * Convierte un array de bytes a una cadena hexadecimal.
-     *
-     * @param bytes El array de bytes.
-     * @return La cadena hexadecimal.
-     */
     private static String getStringMD5(byte[] bytes) {
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < bytes.length; i++) {
@@ -452,7 +393,7 @@ public class MySQLUsuarioDAO implements UsuarioDAO {
 
         try {
             if (connection.abreConexion(null)) {
-                String sql = "Delete from users where idUser=?";
+                String sql = "DELETE FROM users WHERE idUser=?";
                 ps = connection.pStatement(sql);
                 if (ps != null) {
                     ps.setInt(1, IdUsuario);

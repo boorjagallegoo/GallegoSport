@@ -7,11 +7,32 @@ import java.awt.Color;
 
 public class RegistarUsuario extends javax.swing.JPanel {
 
+    boolean isEdition = false; // Variable que indica si la aplicación se encuentra en modo de edición.
+    edu.cotarelo.domain.Usuario userEdition; // Variable que indica si la aplicación se encuentra en modo de edición.
     Fuentes tipoFuente;
 
     public RegistarUsuario() {
         initComponents();
         InitStyles();
+    }
+
+    /**
+     * Constructor de la clase que inicializa la interfaz gráfica, estilos y
+     * establece el modo de edición con la información del usuario
+     * proporcionado.
+     *
+     * @param usuario Objeto de la clase Usuario que se utilizará para la
+     * edición.
+     */
+    public RegistarUsuario(edu.cotarelo.domain.Usuario usuario) {
+        initComponents();
+        InitStyles();
+
+        // Establece el modo de edición a true.
+        isEdition = true;
+
+        // Asigna el usuario proporcionado al objeto userEdition.
+        userEdition = usuario;
     }
 
     private void InitStyles() {
@@ -33,6 +54,22 @@ public class RegistarUsuario extends javax.swing.JPanel {
         passTxt.setFont(tipoFuente.fuente(tipoFuente.roRegular, 0, 12));
         rolTxt.setFont(tipoFuente.fuente(tipoFuente.roRegular, 0, 12));
         btn_registrar.setFont(tipoFuente.fuente(tipoFuente.roBold, 0, 18));
+
+        // Verifica si la aplicación está en modo de edición.
+        if (isEdition) {
+            // Si está en modo de edición, actualiza el título y el texto del botón.
+            title.setText("Editar Usuario");
+            btn_registrar.setText("Guardar");
+
+            // Verifica si hay información para editar.
+            if (userEdition != null) {
+                // Si hay información de usuario, establece los campos de texto con los valores existentes.
+                nameTxt.setText(userEdition.getNombre());
+                apPTxt.setText(userEdition.getApellidos());
+                passTxt.setText(userEdition.getClave());
+                rolTxt.setText(userEdition.getRol());
+            }
+        }
     }
 
     /**
@@ -182,8 +219,6 @@ public class RegistarUsuario extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_registrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_registrarActionPerformed
-        // Llamar a la funcionalidad de agregar un usuario a la BD
-        
         String nombre = nameTxt.getText();
         String apP = apPTxt.getText();
         char[] passChars = passTxt.getPassword(); // Utiliza getPassword() para obtener la contraseña como char[]
@@ -197,7 +232,8 @@ public class RegistarUsuario extends javax.swing.JPanel {
             return;
         }
 
-        edu.cotarelo.domain.Usuario user = new edu.cotarelo.domain.Usuario();
+        // Si se trata de una edición "isEdition" asignale a la varible user lo que traigas en la variable global "userEdition"
+        edu.cotarelo.domain.Usuario user = isEdition ? userEdition : new edu.cotarelo.domain.Usuario();
         user.setNombre(nombre);
         user.setApellidos(apP);
         user.setClave(pass);
@@ -205,15 +241,30 @@ public class RegistarUsuario extends javax.swing.JPanel {
 
         try {
             UsuarioDAO dao = new MySQLUsuarioDAO();
-            dao.insertar(user);
 
-            javax.swing.JOptionPane.showMessageDialog(this, "Usuario registrado exitosamente. \n", "AVISO", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-            nameTxt.setText("");
-            apPTxt.setText("");
-            passTxt.setText("");
-            rolTxt.setText("");
+            // Verifica si la aplicación no está en modo de edición.
+            if (!isEdition) {
+                // Si no está en modo de edición, inserta un nuevo usuario en la base de datos.
+                dao.insertar(user);
+            } else {
+                // Si está en modo de edición, modifica el usuario existente en la base de datos.
+                dao.modificar(user);
+            }
+
+            String successMsg = isEdition ? "modificado" : "registrado";
+
+            javax.swing.JOptionPane.showMessageDialog(this, "Usuario " + successMsg + " exitosamente. \n", "AVISO", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+
+            // Si la operación fue de registro, limpia los campos de texto.
+            if (!isEdition) {
+                nameTxt.setText("");
+                apPTxt.setText("");
+                passTxt.setText("");
+                rolTxt.setText("");
+            }
         } catch (Exception e) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Ocurrió un error al registar el usuario. \n", "AVISO", javax.swing.JOptionPane.ERROR_MESSAGE);
+            String errorMsg = isEdition ? "modificar" : "registrar";
+            javax.swing.JOptionPane.showMessageDialog(this, "Ocurrió un error al " + errorMsg + " el usuario. \n", "AVISO", javax.swing.JOptionPane.ERROR_MESSAGE);
             System.out.println(e.getMessage());
         }
 
