@@ -111,11 +111,6 @@ public class Usuarios extends javax.swing.JPanel {
             }
         });
         tabla_usuarios.getTableHeader().setReorderingAllowed(false);
-        tabla_usuarios.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                tabla_usuariosMousePressed(evt);
-            }
-        });
         jScrollPane1.setViewportView(tabla_usuarios);
 
         btn_delete.setBackground(new java.awt.Color(18, 90, 173));
@@ -208,13 +203,9 @@ public class Usuarios extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tabla_usuariosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_usuariosMousePressed
-
-    }//GEN-LAST:event_tabla_usuariosMousePressed
-
     private void btn_addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addActionPerformed
         // Se crea la accioón de llamar a la otra ventana al hacer click en el boton
-        Sistema.ShowJPanel(new RegistarUsuario());
+        Sistema.ShowJPanel(new RegistrarUsuario());
     }//GEN-LAST:event_btn_addActionPerformed
 
     /**
@@ -256,7 +247,7 @@ public class Usuarios extends javax.swing.JPanel {
             try {
                 int userId = (int) tabla_usuarios.getValueAt(tabla_usuarios.getSelectedRow(), 0);
                 UsuarioDAO dao = new MySQLUsuarioDAO();
-                Sistema.ShowJPanel(new RegistarUsuario(dao.getUsuarioById(userId)));
+                Sistema.ShowJPanel(new RegistrarUsuario(dao.getUsuarioById(userId)));
             } catch (NamingException e) {
                 System.out.println(e.getMessage());
             }

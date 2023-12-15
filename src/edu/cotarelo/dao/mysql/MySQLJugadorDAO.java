@@ -318,5 +318,26 @@ public class MySQLJugadorDAO implements JugadorDAO {
         }
         return lista;
     }
+    
+    @Override
+    public void eliminar(int IdJugador) throws Exception {
+        PreparedStatement ps = null;
+        MySQLConexionDAO connection = new MySQLConexionDAO();
+
+        try {
+            if (connection.abreConexion(null)) {
+                String sql = "DELETE FROM users WHERE idJugador=?";
+                ps = connection.pStatement(sql);
+                if (ps != null) {
+                    ps.setInt(1, IdJugador);
+                    ps.executeUpdate();
+                }
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            connection.cierraConexion(ps);
+        }
+    }
 
 }

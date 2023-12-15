@@ -30,7 +30,8 @@ public class MySQLConexionDAO {
             Class.forName("com.mysql.cj.jdbc.Driver");
             
             // Establecer la conexión a la base de datos MySQL
-            this.connection = DriverManager.getConnection("jdbc:mysql://172.20.52.14:3306/dad2", "root", "abc123.");
+            //  this.connection = DriverManager.getConnection("jdbc:mysql://172.20.52.14:3306/dad2", "root", "abc123.");
+            this.connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/dad2", "root", "abc123.");
             salida = true;
 
         } catch (SQLException e) {

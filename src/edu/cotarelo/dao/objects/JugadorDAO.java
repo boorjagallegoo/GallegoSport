@@ -23,4 +23,5 @@ public interface JugadorDAO {
         // ====================================================================
         
         public List<Jugador> listar() throws Exception;
+        public void eliminar(int IdJugador) throws Exception;
 }
