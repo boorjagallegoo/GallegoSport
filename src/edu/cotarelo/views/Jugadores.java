@@ -16,9 +16,9 @@ public class Jugadores extends javax.swing.JPanel {
         LoadUsers();
     }
 
-     /**
-     * Método que carga los jugadores desde la base de datos y los muestra en una
-     * tabla.
+    /**
+     * Método que carga los jugadores desde la base de datos y los muestra en
+     * una tabla.
      */
     private void LoadUsers() {
         try {
@@ -32,7 +32,7 @@ public class Jugadores extends javax.swing.JPanel {
             System.out.println(e.getMessage());
         }
     }
-    
+
     private void InitStyles() {
         tipoFuente = new Fuentes();
 
@@ -109,11 +109,6 @@ public class Jugadores extends javax.swing.JPanel {
             }
         });
         tabla_jugadores.getTableHeader().setReorderingAllowed(false);
-        tabla_jugadores.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                tabla_jugadoresMousePressed(evt);
-            }
-        });
         jScrollPane1.setViewportView(tabla_jugadores);
 
         btn_delete.setBackground(new java.awt.Color(18, 90, 173));
@@ -206,16 +201,28 @@ public class Jugadores extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tabla_jugadoresMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_jugadoresMousePressed
-
-    }//GEN-LAST:event_tabla_jugadoresMousePressed
-
     private void btn_addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addActionPerformed
         Sistema.ShowJPanel(new RegistarJugador());
     }//GEN-LAST:event_btn_addActionPerformed
 
     private void btn_deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_deleteActionPerformed
-
+        JugadorDAO dao = new MySQLJugadorDAO();
+        DefaultTableModel model = (DefaultTableModel) tabla_jugadores.getModel();
+        // Mostrar mensaje de alerta
+        if (tabla_jugadores.getSelectedRows().length < 1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Debes seleccionar uno o más usuarios a eliminar.\n", "AVISO", javax.swing.JOptionPane.ERROR_MESSAGE);
+        } else {
+            // Se recorren las filas seleccionadas en la tabla de usuarios.
+            for (int i : tabla_jugadores.getSelectedRows()) {
+                try {
+                    int userId = (int) tabla_jugadores.getValueAt(i, 0);
+                    dao.eliminar(userId);
+                    model.removeRow(i);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
     }//GEN-LAST:event_btn_deleteActionPerformed
 
     private void btn_editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editActionPerformed
