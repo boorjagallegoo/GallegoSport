@@ -2,6 +2,7 @@ package edu.cotarelo.views;
 
 import edu.cotarelo.dao.mysql.MySQLUsuarioDAO;
 import edu.cotarelo.dao.objects.UsuarioDAO;
+import edu.cotarelo.domain.Usuario;
 import edu.cotarelo.fonts.Fuentes;
 import java.awt.Color;
 import java.awt.HeadlessException;
@@ -10,7 +11,8 @@ import javax.naming.NamingException;
 public class RegistrarUsuario extends javax.swing.JPanel {
 
     boolean isEdition = false; // Variable que indica si la aplicación se encuentra en modo de edición.
-    edu.cotarelo.domain.Usuario userEdition; // Variable que indica si la aplicación se encuentra en modo de edición.
+    Usuario userEdition; // Variable que indica si la aplicación se encuentra en modo de edición.
+
     Fuentes tipoFuente;
 
     public RegistrarUsuario() {
@@ -26,11 +28,11 @@ public class RegistrarUsuario extends javax.swing.JPanel {
      * @param usuario Objeto de la clase Usuario que se utilizará para la
      * edición.
      */
-    public RegistrarUsuario(edu.cotarelo.domain.Usuario usuario) {
+    public RegistrarUsuario(Usuario usuario) {
         initComponents();
+        isEdition = true;
+        userEdition = usuario;
         InitStyles();
-        isEdition = true;   // Establece el modo de edición a true.
-        userEdition = usuario;  // Asigna el usuario proporcionado al objeto userEdition.
     }
 
     private void InitStyles() {
@@ -210,7 +212,7 @@ public class RegistrarUsuario extends javax.swing.JPanel {
         }
 
         // Si se trata de una edición "isEdition" asignale a la varible user lo que traigas en la variable global "userEdition"
-        edu.cotarelo.domain.Usuario user = isEdition ? userEdition : new edu.cotarelo.domain.Usuario();
+        Usuario user = isEdition ? userEdition : new Usuario();
         user.setNombre(nombre);
         user.setApellidos(apP);
         user.setClave(pass);
@@ -219,12 +221,9 @@ public class RegistrarUsuario extends javax.swing.JPanel {
         try {
             UsuarioDAO dao = new MySQLUsuarioDAO();
 
-            // Verifica si la aplicación no está en modo de edición.
             if (!isEdition) {
-                // Si no está en modo de edición, inserta un nuevo usuario en la base de datos.
                 dao.insertar(user);
             } else {
-                // Si está en modo de edición, modifica el usuario existente en la base de datos.
                 dao.modificar(user);
             }
 
@@ -233,12 +232,11 @@ public class RegistrarUsuario extends javax.swing.JPanel {
             javax.swing.JOptionPane.showMessageDialog(this, "Usuario " + successMsg + " exitosamente. \n", "AVISO", javax.swing.JOptionPane.INFORMATION_MESSAGE);
 
             // Si la operación fue de registro, limpia los campos de texto.
-            if (!isEdition) {
-                nameTxt.setText("");
-                apPTxt.setText("");
-                passTxt.setText("");
-                rolTxt.setText("");
-            }
+            nameTxt.setText("");
+            apPTxt.setText("");
+            passTxt.setText("");
+            rolTxt.setText("");
+
         } catch (HeadlessException | NamingException e) {
             String errorMsg = isEdition ? "modificar" : "registrar";
             javax.swing.JOptionPane.showMessageDialog(this, "Ocurrió un error al " + errorMsg + " el usuario. \n", "AVISO", javax.swing.JOptionPane.ERROR_MESSAGE);
