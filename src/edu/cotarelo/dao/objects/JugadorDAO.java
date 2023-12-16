@@ -22,6 +22,6 @@ public interface JugadorDAO {
         // ====================== by Borja Gallego ============================
         // ====================================================================
         
-        public List<Jugador> listar() throws Exception;
+        public List<Jugador> listar(String name) throws Exception;
         public void eliminar(int IdJugador) throws Exception;
 }

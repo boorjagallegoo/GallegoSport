@@ -280,40 +280,33 @@ public class MySQLJugadorDAO implements JugadorDAO {
     // ====================================================================
     
     /**
-     * Implementación del método para obtener una lista de jugadores desde la
-     * base de datos.
+     * Recupera una lista de jugadores desde la base de datos, filtrando por nombre.
      *
-     * @return Lista de jugadores.
+     * @param name El nombre o parte del nombre para filtrar la búsqueda de jugadores.
+     * @return Una lista de objetos Jugador que coinciden con el filtro de nombre.
      * @throws Exception Si ocurre un error al acceder a la base de datos.
      */
     @Override
-    public List<Jugador> listar() throws Exception {
-        List<Jugador> lista = new ArrayList<>();
+    public List<Jugador> listar(String name) throws Exception {
+        List<Jugador> lista = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
         MySQLConexionDAO connection = new MySQLConexionDAO();
-        String sql;
 
         try {
             if (connection.abreConexion(null)) {
-                // Consulta SQL para seleccionar todos los registros de la tabla jugadores
-                sql = "Select * from jugadores";
+                // Construir la consulta SQL según si el nombre está vacío o no
+                String sql = name.isEmpty() ? "SELECT * FROM jugadores;" : "SELECT * FROM jugadores WHERE nombre LIKE '%" + name + "%';";
                 ps = connection.pStatement(sql);
                 rs = ps.executeQuery();
+
+                lista = new ArrayList<>();
                 while (rs.next()) {
                     Jugador jugador = new Jugador();
-                    // Guardamos los datos de los jugadores en la lista
-                    if (rs.getString("apellidos") != null && !rs.getString("apellidos").isEmpty()) {
-                        jugador.setIdJugador(rs.getInt("IdJugador"));
-                        jugador.setNombre(rs.getString("nombre"));
-                        jugador.setApellidos(rs.getString("apellidos"));
-                        jugador.setPosicion(rs.getString("posicion")); // Asumiendo que hay una columna "posicion" en la tabla
-                    } else {
-                        jugador.setIdJugador(rs.getInt("IdJugador"));
-                        jugador.setNombre(rs.getString("nombre"));
-                        jugador.setApellidos("");
-                        jugador.setPosicion(rs.getString("posicion")); // Asumiendo que hay una columna "posicion" en la tabla
-                    }
+                    jugador.setIdJugador(rs.getInt("IdJugador"));
+                    jugador.setNombre(rs.getString("nombre"));
+                    jugador.setApellidos(rs.getString("apellidos"));
+                    jugador.setPosicion(rs.getString("posicion")); // Asumiendo que hay una columna "posicion" en la tabla
                     lista.add(jugador);
                 }
             }
@@ -324,6 +317,7 @@ public class MySQLJugadorDAO implements JugadorDAO {
             // Cerramos la conexión
             connection.cierraConexion(ps);
         }
+
         return lista;
     }
 

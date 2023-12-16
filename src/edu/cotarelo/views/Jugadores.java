@@ -28,7 +28,7 @@ public class Jugadores extends javax.swing.JPanel {
             // Se obtiene el modelo de la tabla de usuarios.
             DefaultTableModel model = (DefaultTableModel) tabla_jugadores.getModel();
             // Se recorren los usuarios obtenidos de la base de datos y se agregan al modelo de la tabla.
-            dao.listar().forEach((u) -> model.addRow(new Object[]{u.getIdJugador(), u.getNombre(), u.getApellidos(), u.getPosicion()}));
+            dao.listar("").forEach((u) -> model.addRow(new Object[]{u.getIdJugador(), u.getNombre(), u.getApellidos(), u.getPosicion()}));
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -239,7 +239,22 @@ public class Jugadores extends javax.swing.JPanel {
     }//GEN-LAST:event_btn_editActionPerformed
 
     private void btn_searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_searchActionPerformed
-
+        /**
+         * Actualiza la tabla de jugadores en la interfaz gráfica según la
+         * búsqueda realizada.
+         *
+         * @param buscarJugadores El texto utilizado para filtrar la búsqueda de
+         * jugadores.
+         */
+        try {
+            JugadorDAO dao = new MySQLJugadorDAO();
+            DefaultTableModel model = (DefaultTableModel) tabla_jugadores.getModel();
+            // Se establece el número de filas en cero para limpiar la tabla antes de agregar nuevos datos
+            model.setRowCount(0);
+            dao.listar(buscarJugadores.getText()).forEach((u) -> model.addRow(new Object[]{u.getIdJugador(), u.getNombre(), u.getApellidos(), u.getPosicion()}));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }//GEN-LAST:event_btn_searchActionPerformed
 
 
