@@ -10,19 +10,23 @@ import javax.naming.NamingException;
 
 public class RegistrarClub extends javax.swing.JPanel {
 
+    boolean isEdition = false; // Variable que indica si la aplicación se encuentra en modo de edición.
+    Club clubEdition; // Variable que indica si la aplicación se encuentra en modo de edición.
     Fuentes tipoFuente;
 
     public RegistrarClub() {
         initComponents();
-        InitStyles(false, null);
+        InitStyles();
     }
 
     RegistrarClub(Club club) {
         initComponents();
-        InitStyles(true, club);
+        isEdition = true;
+        clubEdition = club;
+        InitStyles();
     }
 
-    private void InitStyles(boolean isEdition, Club club) {
+    private void InitStyles() {
         tipoFuente = new Fuentes();
 
         title.setFont(tipoFuente.fuente(tipoFuente.roBold, 0, 22));
@@ -39,15 +43,14 @@ public class RegistrarClub extends javax.swing.JPanel {
         campoTxt.setFont(tipoFuente.fuente(tipoFuente.roRegular, 0, 12));
         btn_subir.setFont(tipoFuente.fuente(tipoFuente.roBold, 0, 18));
 
-        
         if (isEdition) {
             title.setText("Editar Club");
             btn_subir.setText("Guardar");
-        // Si estamos en modo edición, se actualizan los campos de texto con los datos del jugador existente.
-            if (club != null) {
-                nameClubTxt.setText(club.getNombre());
-                descTxt.setText(club.getDescripcion());
-                campoTxt.setText(club.getCampo());
+            // Si estamos en modo edición, se actualizan los campos de texto con los datos del jugador existente.
+            if (clubEdition != null) {
+                nameClubTxt.setText(clubEdition.getNombre());
+                descTxt.setText(clubEdition.getDescripcion());
+                campoTxt.setText(clubEdition.getCampo());
             }
         }
     }
@@ -183,22 +186,36 @@ public class RegistrarClub extends javax.swing.JPanel {
             return;
         }
 
-        Club club = new edu.cotarelo.domain.Club();
+        Club club = isEdition ? clubEdition : new edu.cotarelo.domain.Club();
         club.setNombre(nombre);
         club.setDescripcion(desc);
         club.setCampo(campo);
 
         try {
             ClubDAO dao = new MySQLClubDAO();
-            dao.insertar(club);
 
-            javax.swing.JOptionPane.showMessageDialog(this, "Club dado de alta exitosamente. \n", "AVISO", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            if (!isEdition) {
+                // Si no estamos en modo edición, se inserta el club usando dao.insertar().
+                dao.insertar(club);
+            } else {
+                // Si estamos en modo edición, se modifica el club usando dao.modificar().
+                Club elClub = isEdition ? clubEdition : new edu.cotarelo.domain.Club();
+                elClub.setIdClub(nameClubTxt.getText()); // Suponiendo que el ID del club se basa en el nombre, ajusta según tu implementación.
+                int result = dao.modificar(club, elClub);
+
+                if (result == 1) {
+                    javax.swing.JOptionPane.showMessageDialog(this, "Club modificado exitosamente. \n", "AVISO", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    javax.swing.JOptionPane.showMessageDialog(this, "El club no se pudo modificar. \n", "AVISO", javax.swing.JOptionPane.ERROR_MESSAGE);
+                }
+            }
 
             nameClubTxt.setText("");
             descTxt.setText("");
             campoTxt.setText("");
         } catch (HeadlessException | NamingException e) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Ocurrió un error al dar de alta al club. \n", "AVISO", javax.swing.JOptionPane.ERROR_MESSAGE);
+            String errorMsg = isEdition ? "modificar" : "registrar";
+            javax.swing.JOptionPane.showMessageDialog(this, "Ocurrió un error al " + errorMsg + " el club. \n", "AVISO", javax.swing.JOptionPane.ERROR_MESSAGE);
             System.out.println(e.getMessage());
         }
     }//GEN-LAST:event_btn_subirActionPerformed

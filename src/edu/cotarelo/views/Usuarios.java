@@ -43,7 +43,7 @@ public class Usuarios extends javax.swing.JPanel {
             // Se obtiene el modelo de la tabla de usuarios.
             DefaultTableModel model = (DefaultTableModel) tabla_usuarios.getModel();
             // Se recorren los usuarios obtenidos de la base de datos y se agregan al modelo de la tabla.
-            dao.listar().forEach((u) -> model.addRow(new Object[]{u.getIdUsuario(), u.getNombre(), u.getApellidos(), u.getRol(), u.getClave()}));
+            dao.listar("").forEach((u) -> model.addRow(new Object[]{u.getIdUsuario(), u.getNombre(), u.getApellidos(), u.getRol(), u.getClave()}));
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -234,7 +234,7 @@ public class Usuarios extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_btn_deleteActionPerformed
-    
+
     /**
      * Maneja el evento de clic en el botón de edición. Abre la interfaz de
      * registro de usuario con los detalles del usuario seleccionado en la
@@ -257,7 +257,15 @@ public class Usuarios extends javax.swing.JPanel {
     }//GEN-LAST:event_btn_editActionPerformed
 
     private void btn_searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_searchActionPerformed
-
+        try {
+             UsuarioDAO dao = new MySQLUsuarioDAO();
+            DefaultTableModel model = (DefaultTableModel) tabla_usuarios.getModel();
+            // Se establece el número de filas en cero para limpiar la tabla antes de agregar nuevos datos
+            model.setRowCount(0);
+            dao.listar(buscarUsuarios.getText()).forEach((u) -> model.addRow(new Object[]{u.getIdUsuario(), u.getNombre(), u.getApellidos(), u.getRol(), u.getClave()}));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }//GEN-LAST:event_btn_searchActionPerformed
 
 

@@ -22,7 +22,7 @@ public interface UsuarioDAO {
     
     // Generado por mi porque si no me da error
     
-    public List<Usuario> listar() throws Exception;
+    public List<Usuario> listar(String name) throws Exception;
     public void eliminar(int IdUsuario) throws Exception;
 
 }

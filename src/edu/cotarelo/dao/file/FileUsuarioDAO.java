@@ -67,14 +67,14 @@ public class FileUsuarioDAO implements UsuarioDAO {
     // ====================================================================
     // ====================== by Borja Gallego ============================
     // ==================================================================== 
-    
-    @Override
-    public List<Usuario> listar() throws Exception {
-        return null;
-    }
 
     @Override
     public void eliminar(int IdUsuario) throws Exception {
+    }
+
+    @Override
+    public List<Usuario> listar(String name) throws Exception {
+        return null;
     }
 
 }

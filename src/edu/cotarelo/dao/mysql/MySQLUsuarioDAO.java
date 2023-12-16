@@ -320,7 +320,6 @@ public class MySQLUsuarioDAO implements UsuarioDAO {
     }
 
     /*MÉTODOS AUXILIARES*/
-
     private static String md5(String source) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
@@ -348,10 +347,19 @@ public class MySQLUsuarioDAO implements UsuarioDAO {
     // ====================================================================
     // ====================== by Borja Gallego ============================
     // ====================================================================
-  
+    
+    /**
+     * Recupera la lista de usuarios de la base de datos que cumplen con el
+     * nombre especificado.
+     *
+     * @param name El nombre a buscar en los usuarios.
+     * @return Una lista de objetos Usuario que representan los usuarios
+     * almacenados en la base de datos.
+     * @throws Exception Si ocurre algún error durante la recuperación de datos.
+     */
     @Override
-    public List<Usuario> listar() throws Exception {
-        String sql = "Select * from users"; // Obtener todos los usuarios por defecto
+    public List<Usuario> listar(String name) throws Exception {
+        String sql = name.isEmpty() ? "SELECT * FROM users;" : "SELECT * FROM users WHERE nombre LIKE '%" + name + "%'";
 
         List<Usuario> lista = new ArrayList<>();
         PreparedStatement ps = null;
@@ -376,7 +384,6 @@ public class MySQLUsuarioDAO implements UsuarioDAO {
                     lista.add(user);
                 }
             }
-
         } catch (SQLException | ClassNotFoundException | NamingException e) {
             e.printStackTrace();
         } finally {
@@ -408,6 +415,3 @@ public class MySQLUsuarioDAO implements UsuarioDAO {
     }
 
 }
-    
-
-

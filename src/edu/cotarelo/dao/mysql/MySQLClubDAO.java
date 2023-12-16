@@ -103,6 +103,18 @@ public class MySQLClubDAO implements ClubDAO {
         return salida;
     }
 
+    /**
+     * Modifica un registro de club en la base de datos.
+     *
+     * @param nuevoclub Objeto Club con los nuevos datos a actualizar.
+     * @param elclub Objeto Club que representa el club existente y que se va a
+     * modificar.
+     * @return Un entero que indica el resultado de la operación: - 1 si la
+     * modificación fue exitosa. - Otro valor si hubo algún problema durante la
+     * modificación.
+     * @throws NamingException Si hay un problema con el nombre en el contexto
+     * de nombres.
+     */
     @Override
     public int modificar(Club nuevoclub, Club elclub) throws NamingException {
         Integer salida = -1;
@@ -110,19 +122,28 @@ public class MySQLClubDAO implements ClubDAO {
         MySQLConexionDAO connection = new MySQLConexionDAO();
         try {
             if (connection.abreConexion(null)) {
-                String sql = "UPDATE clubs SET nombre = '" + nuevoclub.getNombre() + "', descripcion='" + nuevoclub.getDescripcion() + "', campo='" + nuevoclub.getCampo() + "'  WHERE nombre ='" + elclub.getIdClub() + "'";
+                // Construir la consulta SQL para la actualización
+                String sql = "UPDATE clubs SET nombre = ?, descripcion = ?, campo = ? WHERE nombre = ?";
                 ps = connection.pStatementGK(sql, Statement.NO_GENERATED_KEYS);
+
+                // Establecer los parámetros en el PreparedStatement
+                ps.setString(1, nuevoclub.getNombre());
+                ps.setString(2, nuevoclub.getDescripcion());
+                ps.setString(3, nuevoclub.getCampo());
+                ps.setString(4, elclub.getIdClub());
+
                 if (ps != null) {
                     int rowAffected = ps.executeUpdate();
                     if (rowAffected == 1) {
-                        salida = 1;
+                        salida = 1; // Éxito en la modificación
                     }
                 }
             }
         } catch (SQLException | ClassNotFoundException e) {
-            // TODO Auto-generated catch block
+            // Manejar las excepciones durante la conexión o ejecución de la consulta
             e.printStackTrace();
-        } finally {//cerramos la conexión
+        } finally {
+            // Cerrar la conexión
             connection.cierraConexion(ps);
         }
         return salida;
@@ -304,11 +325,19 @@ public class MySQLClubDAO implements ClubDAO {
     // ====================================================================
     // ====================== by Borja Gallego ============================
     // ====================================================================
+    
+    /**
+     * Recupera la lista de clubes de la base de datos que cumplen con el nombre
+     * especificado.
+     *
+     * @param name El nombre a buscar en los clubes.
+     * @return Una lista de objetos Club que representan los clubes almacenados
+     * en la base de datos.
+     * @throws Exception Si ocurre algún error durante la recuperación de datos.
+     */
     @Override
-    public List<Club> listar() throws Exception {
-        // Recupera de BBDD la lista de clubs
-        // Todos | clubs sin jugadores
-        String sql = "SELECT clubs.* FROM clubs";
+    public List<Club> listar(String name) throws Exception {
+        String sql = "SELECT * FROM clubs WHERE nombre LIKE '%" + name + "%'";
         List<Club> lista = new ArrayList<>();
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -318,21 +347,24 @@ public class MySQLClubDAO implements ClubDAO {
             if (connection.abreConexion(null)) {
                 ps = connection.pStatement(sql);
                 rs = ps.executeQuery();
+
                 while (rs.next()) {
                     Club club = new Club();
-                    // Guardamos las listas de clubes en la lista
                     club.setIdClub(rs.getString("nombre"));
                     club.setNombre(rs.getString("nombre"));
+
                     if (rs.getString("descripcion") != null && !rs.getString("descripcion").isEmpty()) {
                         club.setDescripcion(rs.getString("descripcion"));
                     } else {
                         club.setDescripcion("");
                     }
+
                     if (rs.getString("campo") != null && !rs.getString("campo").isEmpty()) {
                         club.setCampo(rs.getString("campo"));
                     } else {
                         club.setCampo("");
                     }
+
                     lista.add(club);
                 }
             }

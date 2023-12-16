@@ -7,6 +7,8 @@ import edu.cotarelo.dao.objects.JugadorDAO;
 import edu.cotarelo.domain.Club;
 import edu.cotarelo.fonts.Fuentes;
 import edu.cotarelo.sistema.Sistema;
+import java.util.ArrayList;
+import java.util.List;
 import javax.naming.NamingException;
 import javax.swing.table.DefaultTableModel;
 
@@ -28,7 +30,7 @@ public class AllClubes extends javax.swing.JPanel {
         try {
             ClubDAO dao = new MySQLClubDAO();
             DefaultTableModel model = (DefaultTableModel) tabla_clubs.getModel();
-            dao.listar().forEach((u) -> model.addRow(new Object[]{u.getNombre(), u.getDescripcion(), u.getCampo()}));
+            dao.listar("").forEach((u) -> model.addRow(new Object[]{u.getNombre(), u.getDescripcion(), u.getCampo()}));
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -207,21 +209,36 @@ public class AllClubes extends javax.swing.JPanel {
     }//GEN-LAST:event_btn_addActionPerformed
 
     private void btn_deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_deleteActionPerformed
-        ClubDAO dao = new MySQLClubDAO();  // Utiliza ClubDAO en lugar de JugadorDAO
+        ClubDAO dao = new MySQLClubDAO();
         DefaultTableModel model = (DefaultTableModel) tabla_clubs.getModel();
 
         if (tabla_clubs.getSelectedRows().length < 1) {
             javax.swing.JOptionPane.showMessageDialog(this, "Debes seleccionar uno o más clubs a eliminar.\n", "AVISO", javax.swing.JOptionPane.ERROR_MESSAGE);
         } else {
+            // Crear una lista para almacenar los IDs de los clubs seleccionados
+            List<String> selectedClubIds = new ArrayList<>();
+
+            // Obtener los IDs de los clubs seleccionados
             for (int i : tabla_clubs.getSelectedRows()) {
+                String clubId = (String) tabla_clubs.getValueAt(i, 0); // Asumiendo que la columna 0 contiene el ID del club
+                selectedClubIds.add(clubId);
+            }
+
+            // Eliminar los clubs seleccionados
+            for (String clubId : selectedClubIds) {
                 try {
-                    String clubId = (String) tabla_clubs.getValueAt(i, 0); // Asumiendo que la columna 0 contiene el ID del club
                     Club club = new Club();
                     club.setIdClub(clubId);
                     dao.borrar(club);
-                    model.removeRow(i);
                 } catch (NamingException e) {
-                    System.out.println(e.getMessage());
+                    System.out.println("Error al eliminar el club con ID " + clubId + ": " + e.getMessage());
+                }
+            }
+
+            // Eliminar las filas de la tabla correspondientes a los clubs eliminados
+            for (int i = tabla_clubs.getRowCount() - 1; i >= 0; i--) {
+                if (selectedClubIds.contains(tabla_clubs.getValueAt(i, 0))) {
+                    model.removeRow(i);
                 }
             }
         }
@@ -247,7 +264,15 @@ public class AllClubes extends javax.swing.JPanel {
     }//GEN-LAST:event_btn_editActionPerformed
 
     private void btn_searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_searchActionPerformed
-
+        try {
+             ClubDAO dao = new MySQLClubDAO();
+            DefaultTableModel model = (DefaultTableModel) tabla_clubs.getModel();
+            // Se establece el número de filas en cero para limpiar la tabla antes de agregar nuevos datos
+            model.setRowCount(0);
+            dao.listar(buscarClubs.getText()).forEach((u) -> model.addRow(new Object[]{u.getNombre(), u.getDescripcion(), u.getCampo()}));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }//GEN-LAST:event_btn_searchActionPerformed
 
 

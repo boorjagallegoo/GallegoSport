@@ -21,6 +21,6 @@ public interface ClubDAO {
     // ====================================================================
     // ====================== by Borja Gallego ============================
     // ====================================================================
-    public List<Club> listar() throws Exception;
+    public List<Club> listar(String name) throws Exception;
 
 }
