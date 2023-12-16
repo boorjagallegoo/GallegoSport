@@ -179,7 +179,7 @@ public class RegistrarClub extends javax.swing.JPanel {
         try {
             ClubDAO dao = new MySQLClubDAO();
             dao.insertar(club);
-            
+
             javax.swing.JOptionPane.showMessageDialog(this, "Club dado de alta exitosamente. \n", "AVISO", javax.swing.JOptionPane.INFORMATION_MESSAGE);
 
             nameClubTxt.setText("");

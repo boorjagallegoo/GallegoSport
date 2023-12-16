@@ -20,16 +20,13 @@ public class AllClubes extends javax.swing.JPanel {
     }
 
     /**
-     * Método que carga los CLUBS desde la base de datos y los muestra en
-     * una tabla.
+     * Método que carga los CLUBS desde la base de datos y los muestra en una
+     * tabla.
      */
     private void LoadClubs() {
         try {
-            // Se crea una instancia de UsuarioDAO que implementa MySQLUsuarioDAO.
             ClubDAO dao = new MySQLClubDAO();
-            // Se obtiene el modelo de la tabla de usuarios.
             DefaultTableModel model = (DefaultTableModel) tabla_clubs.getModel();
-            // Se recorren los usuarios obtenidos de la base de datos y se agregan al modelo de la tabla.
             dao.listar().forEach((u) -> model.addRow(new Object[]{u.getNombre(), u.getDescripcion(), u.getCampo()}));
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -93,14 +90,14 @@ public class AllClubes extends javax.swing.JPanel {
 
             },
             new String [] {
-                "ID", "Nombre", "Descripción", "Campo"
+                "Nombre", "Descripción", "Campo"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, true, true
+                false, true, true
             };
 
             public Class getColumnClass(int columnIndex) {

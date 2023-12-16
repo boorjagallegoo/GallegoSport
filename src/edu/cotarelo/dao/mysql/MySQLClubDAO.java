@@ -286,8 +286,6 @@ public class MySQLClubDAO implements ClubDAO {
     // ====================================================================
     // ====================== by Borja Gallego ============================
     // ====================================================================
- 
-
     @Override
     public void eliminar(int idClub) throws Exception {
         PreparedStatement ps = null;
@@ -314,7 +312,45 @@ public class MySQLClubDAO implements ClubDAO {
 
     @Override
     public List<Club> listar() throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        // Recupera de BBDD la lista de clubs
+        // Todos | clubs sin jugadores
+        String sql = "SELECT clubs.* FROM clubs";
+        List<Club> lista = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        MySQLConexionDAO connection = new MySQLConexionDAO();
+
+        try {
+            if (connection.abreConexion(null)) {
+                ps = connection.pStatement(sql);
+                rs = ps.executeQuery();
+                while (rs.next()) {
+                    Club club = new Club();
+                    // Guardamos las listas de clubes en la lista
+                    club.setIdClub(rs.getString("nombre"));
+                    club.setNombre(rs.getString("nombre"));
+                    if (rs.getString("descripcion") != null && !rs.getString("descripcion").isEmpty()) {
+                        club.setDescripcion(rs.getString("descripcion"));
+                    } else {
+                        club.setDescripcion("");
+                    }
+                    if (rs.getString("campo") != null && !rs.getString("campo").isEmpty()) {
+                        club.setCampo(rs.getString("campo"));
+                    } else {
+                        club.setCampo("");
+                    }
+                    lista.add(club);
+                }
+            }
+        } catch (SQLException | ClassNotFoundException | NamingException e) {
+            // Manejo de excepciones
+            e.printStackTrace();
+        } finally {
+            // Cerramos la conexión
+            connection.cierraConexion(ps);
+        }
+
+        return lista;
     }
 
 }
