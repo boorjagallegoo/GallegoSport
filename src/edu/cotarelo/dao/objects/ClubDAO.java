@@ -6,15 +6,23 @@ import java.util.Hashtable;
 import javax.naming.NamingException;
 
 import edu.cotarelo.domain.Club;
+import java.util.List;
 
 public interface ClubDAO {
-	public int insertar(Club club) throws NamingException;
-	public Club getClubById(String idClub) throws NamingException;
-	public boolean estaClubEnBBDD(Club user);
-	public boolean tieneJugadores(Club club);
-	public int borrar(Club club) throws NamingException;
-	public int modificar(Club nuevoclub,Club elclub) throws NamingException ;
-	public Hashtable<Integer, String> getListaSelect(int Todos);
-	public ArrayList<Club> getLista(int Todos);
-	;
+    public int insertar(Club club) throws NamingException;
+    public Club getClubById(String idClub) throws NamingException;
+    public boolean estaClubEnBBDD(Club user);
+    public boolean tieneJugadores(Club club);
+    public int borrar(Club club) throws NamingException;
+    public int modificar(Club nuevoclub, Club elclub) throws NamingException;
+    public Hashtable<Integer, String> getListaSelect(int Todos);
+    public ArrayList<Club> getLista(int Todos);
+
+    // ====================================================================
+    // ====================== by Borja Gallego ============================
+    // ====================================================================
+    public List<Club> listar() throws Exception;
+
+    public void eliminar(int idClub) throws Exception;
+
 }

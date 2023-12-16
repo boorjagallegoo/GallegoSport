@@ -1,7 +1,6 @@
 package edu.cotarelo.views;
 
 import edu.cotarelo.fonts.Fuentes;
-import edu.cotarelo.sistema.Sistema;
 
 public class Partidos extends javax.swing.JPanel {
 
@@ -148,7 +147,7 @@ public class Partidos extends javax.swing.JPanel {
     }//GEN-LAST:event_tabla_partidosInputMethodTextChanged
 
     private void btn_crearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_crearActionPerformed
-         Sistema.ShowJPanel(new RegistrarClub());
+       
     }//GEN-LAST:event_btn_crearActionPerformed
 
     private void btn_actuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_actuActionPerformed

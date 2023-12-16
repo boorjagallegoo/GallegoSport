@@ -1,7 +1,14 @@
 package edu.cotarelo.views;
 
+import edu.cotarelo.dao.mysql.MySQLClubDAO;
+import edu.cotarelo.dao.objects.ClubDAO;
+import edu.cotarelo.domain.Club;
 import edu.cotarelo.fonts.Fuentes;
 import java.awt.Color;
+import java.awt.HeadlessException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.NamingException;
 
 public class RegistrarClub extends javax.swing.JPanel {
 
@@ -23,6 +30,7 @@ public class RegistrarClub extends javax.swing.JPanel {
         descLbl.setForeground(Color.black);
         campoLbl.setFont(tipoFuente.fuente(tipoFuente.roRegular, 0, 14));
         campoLbl.setForeground(Color.black);
+
         nameClubTxt.setFont(tipoFuente.fuente(tipoFuente.roRegular, 0, 12));
         descTxt.setFont(tipoFuente.fuente(tipoFuente.roRegular, 0, 12));
         campoTxt.setFont(tipoFuente.fuente(tipoFuente.roRegular, 0, 12));
@@ -61,7 +69,6 @@ public class RegistrarClub extends javax.swing.JPanel {
         nameClubLbl.setText("Nombre");
 
         nameClubTxt.setForeground(new java.awt.Color(204, 204, 204));
-        nameClubTxt.setText("Ingrese el nombre del club");
 
         descLbl.setText("Descripción");
 
@@ -77,6 +84,11 @@ public class RegistrarClub extends javax.swing.JPanel {
         btn_subir.setText("Subir");
         btn_subir.setBorderPainted(false);
         btn_subir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_subir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_subirActionPerformed(evt);
+            }
+        });
 
         imgPageRC.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edu/cotarelo/imagenes/EscudoEspaña.png"))); // NOI18N
 
@@ -146,6 +158,38 @@ public class RegistrarClub extends javax.swing.JPanel {
             .addComponent(background, javax.swing.GroupLayout.DEFAULT_SIZE, 405, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btn_subirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_subirActionPerformed
+        String nombre = nameClubTxt.getText();
+        String desc = descTxt.getText();
+        String campo = campoTxt.getText();
+
+        // Validaciones para los campos
+        if (nombre.isEmpty() || desc.isEmpty() || campo.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Debe llenar todos los campos. \n", "AVISO", javax.swing.JOptionPane.ERROR_MESSAGE);
+            nameClubTxt.requestFocus();
+            return;
+        }
+
+        Club club = new edu.cotarelo.domain.Club();
+        club.setNombre(nombre);
+        club.setDescripcion(desc);
+        club.setCampo(campo);
+
+        try {
+            ClubDAO dao = new MySQLClubDAO();
+            dao.insertar(club);
+            
+            javax.swing.JOptionPane.showMessageDialog(this, "Club dado de alta exitosamente. \n", "AVISO", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+
+            nameClubTxt.setText("");
+            descTxt.setText("");
+            campoTxt.setText("");
+        } catch (HeadlessException | NamingException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Ocurrió un error al dar de alta al club. \n", "AVISO", javax.swing.JOptionPane.ERROR_MESSAGE);
+            System.out.println(e.getMessage());
+        }
+    }//GEN-LAST:event_btn_subirActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel background;

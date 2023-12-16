@@ -1,23 +1,14 @@
 package edu.cotarelo.sistema;
 
-import edu.cotarelo.dao.factories.MySQLFactory;
-import edu.cotarelo.dao.objects.UsuarioDAO;
-import edu.cotarelo.domain.Usuario;
 import edu.cotarelo.fonts.Fuentes;
 
 import edu.cotarelo.views.*;
 import java.awt.Color;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.ArrayList;
 import java.util.Locale;
-import javax.naming.NamingException;
-import javax.swing.table.DefaultTableModel;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
-import javax.swing.text.AbstractDocument.Content;
 
 /**
  * Clase que representa la interfaz gráfica del sistema.
@@ -77,83 +68,7 @@ public class Sistema extends javax.swing.JFrame {
         content.revalidate();
         content.repaint();
     }
-
-    /**
-     * Método para realizar el alta de un nuevo usuario.
-     */
-    /*
-    private void altaUsuario() {
-        // Obtiene la información del nuevo usuario desde la interfaz gráfica
-        Usuario nuevo = new Usuario(usuarioAltaNombre.getText(), usuarioAltaApellidos.getText(),
-                usuarioAltaContraseña.getText(), usuarioAltaRol.getSelectedItem().toString());
-
-        // Crea una fábrica para obtener el DAO correspondiente
-        MySQLFactory factoria = new MySQLFactory();
-        UsuarioDAO e1DAO = factoria.getUsuarioDAO();
-
-        try {
-            // Intenta insertar el nuevo usuario en la base de datos
-            int salida = e1DAO.insertar(nuevo);
-
-            // Actualiza la interfaz según el resultado de la operación
-            if (salida < 0) {
-                usuarioRespuesta.setForeground(Color.red);
-                usuarioRespuesta.setText("No se ha podido insertar.");
-            } else {
-                usuarioRespuesta.setForeground(Color.green);
-                usuarioRespuesta.setText("El usuario " + usuarioAltaNombre.getText() + " "
-                        + usuarioAltaApellidos.getText() + " ha sido insertado.");
-                // Limpia los campos de la interfaz
-                usuarioAltaNombre.setText("");
-                usuarioAltaApellidos.setText("");
-                usuarioAltaContraseña.setText("");
-                usuarioAltaRol.setSelectedItem(0);
-            }
-        } catch (NamingException e) {
-            // Captura la excepción y la registra en el log
-            Logger.getLogger(Sistema.class.getName()).log(Level.SEVERE, null, e);
-        }
-    }
-     */
-    /**
-     * Método para obtener y mostrar el listado de usuarios en la interfaz.
-     */
-    /*
-    private void usuarioListado() {
-        // Obtiene el modelo de la tabla de usuarios
-        DefaultTableModel dm = (DefaultTableModel) tablaUsuarioListado.getModel();
-        // Limpia los datos actuales de la tabla
-        dm.getDataVector().removeAllElements();
-        dm.fireTableDataChanged();
-
-        // Crea una fábrica para obtener el DAO correspondiente
-        MySQLFactory factoria = new MySQLFactory();
-        UsuarioDAO usuarioDAO = factoria.getUsuarioDAO();
-
-        try {
-            // Obtiene la lista de usuarios de la base de datos
-            ArrayList<Usuario> lista = usuarioDAO.getListaUsuarios(1);
-
-            // Actualiza la interfaz según la existencia de usuarios en la lista
-            if (lista == null || lista.isEmpty()) {
-                usuarioRespuesta.setForeground(Color.blue);
-                usuarioRespuesta.setText("No hay usuarios en la BBDD.");
-            } else {
-                // Llena la tabla con la información de los usuarios
-                for (int i = 0; i < lista.size(); i++) {
-                    Object[] auxObject = new Object[4];
-                    auxObject[0] = lista.get(i).getNombre();
-                    auxObject[1] = lista.get(i).getApellidos();
-                    auxObject[2] = lista.get(i).getRol();
-                    auxObject[3] = lista.get(i).getIdUsuario();
-                    dm.addRow(auxObject);
-                }
-            }
-        } catch (ClassNotFoundException e) {
-            // Captura la excepción y la registra en el log
-            Logger.getLogger(Sistema.class.getName()).log(Level.SEVERE, null, e);
-        }
-    } */
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -173,6 +88,7 @@ public class Sistema extends javax.swing.JFrame {
         btn_usuarios = new javax.swing.JButton();
         btn_jugadores = new javax.swing.JButton();
         btn_partidos = new javax.swing.JButton();
+        btn_allClubes = new javax.swing.JButton();
         Header = new javax.swing.JPanel();
         navText = new javax.swing.JLabel();
         dateText = new javax.swing.JLabel();
@@ -298,6 +214,22 @@ public class Sistema extends javax.swing.JFrame {
             }
         });
 
+        btn_allClubes.setBackground(new java.awt.Color(21, 101, 192));
+        btn_allClubes.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        btn_allClubes.setForeground(new java.awt.Color(255, 255, 255));
+        btn_allClubes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edu/cotarelo/imagenes/Porteria.png"))); // NOI18N
+        btn_allClubes.setText("Todos los Clubs");
+        btn_allClubes.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 13, 1, 1, new java.awt.Color(0, 0, 0)));
+        btn_allClubes.setBorderPainted(false);
+        btn_allClubes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_allClubes.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btn_allClubes.setIconTextGap(13);
+        btn_allClubes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_allClubesActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout MenuLayout = new javax.swing.GroupLayout(Menu);
         Menu.setLayout(MenuLayout);
         MenuLayout.setHorizontalGroup(
@@ -314,9 +246,10 @@ public class Sistema extends javax.swing.JFrame {
                             .addComponent(btn_usuarios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btn_jugadores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btn_partidos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btn_incidencias, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+                            .addComponent(btn_incidencias, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btn_clubes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btn_principal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(btn_principal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btn_allClubes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(17, 17, 17)))
                 .addContainerGap())
         );
@@ -339,7 +272,9 @@ public class Sistema extends javax.swing.JFrame {
                 .addComponent(btn_jugadores, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btn_partidos, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(226, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btn_allClubes, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(160, Short.MAX_VALUE))
         );
 
         background.add(Menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -7, -1, 720));
@@ -523,6 +458,10 @@ public class Sistema extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_exitTxtMouseClicked
 
+    private void btn_allClubesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_allClubesActionPerformed
+         ShowJPanel(new AllClubes());
+    }//GEN-LAST:event_btn_allClubesActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -565,6 +504,7 @@ public class Sistema extends javax.swing.JFrame {
     private javax.swing.JLabel appName;
     private javax.swing.JPanel background;
     private javax.swing.JPanel barraSuperior;
+    private javax.swing.JButton btn_allClubes;
     private javax.swing.JButton btn_clubes;
     private javax.swing.JButton btn_incidencias;
     private javax.swing.JButton btn_jugadores;
