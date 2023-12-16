@@ -279,7 +279,13 @@ public class MySQLJugadorDAO implements JugadorDAO {
     // ====================== by Borja Gallego ============================
     // ====================================================================
     
-    // Metodo para mostrar todos los jugadores en la Tabla.
+    /**
+     * Implementación del método para obtener una lista de jugadores desde la
+     * base de datos.
+     *
+     * @return Lista de jugadores.
+     * @throws Exception Si ocurre un error al acceder a la base de datos.
+     */
     @Override
     public List<Jugador> listar() throws Exception {
         List<Jugador> lista = new ArrayList<>();
@@ -290,12 +296,13 @@ public class MySQLJugadorDAO implements JugadorDAO {
 
         try {
             if (connection.abreConexion(null)) {
+                // Consulta SQL para seleccionar todos los registros de la tabla jugadores
                 sql = "Select * from jugadores";
                 ps = connection.pStatement(sql);
                 rs = ps.executeQuery();
                 while (rs.next()) {
                     Jugador jugador = new Jugador();
-                    // guardamos las lista de jugadores en la tabla Hash
+                    // Guardamos los datos de los jugadores en la lista
                     if (rs.getString("apellidos") != null && !rs.getString("apellidos").isEmpty()) {
                         jugador.setIdJugador(rs.getInt("IdJugador"));
                         jugador.setNombre(rs.getString("nombre"));
@@ -311,31 +318,41 @@ public class MySQLJugadorDAO implements JugadorDAO {
                 }
             }
         } catch (SQLException | ClassNotFoundException | NamingException e) {
-            // TODO Auto-generated catch block
+            // Manejo de excepciones
             e.printStackTrace();
-        } finally {// cerramos la conexión
+        } finally {
+            // Cerramos la conexión
             connection.cierraConexion(ps);
         }
         return lista;
     }
-    
+
+    /**
+     * Implementación del método para eliminar un jugador de la base de datos.
+     *
+     * @param idJugador ID del jugador a eliminar.
+     * @throws Exception Si ocurre un error al acceder a la base de datos.
+     */
     @Override
-    public void eliminar(int IdJugador) throws Exception {
+    public void eliminar(int idJugador) throws Exception {
         PreparedStatement ps = null;
         MySQLConexionDAO connection = new MySQLConexionDAO();
 
         try {
             if (connection.abreConexion(null)) {
-                String sql = "DELETE FROM users WHERE idJugador=?";
+                // Consulta SQL para eliminar un jugador por su ID
+                String sql = "DELETE FROM jugadores WHERE IdJugador=?";
                 ps = connection.pStatement(sql);
                 if (ps != null) {
-                    ps.setInt(1, IdJugador);
+                    ps.setInt(1, idJugador);
                     ps.executeUpdate();
                 }
             }
         } catch (SQLException | ClassNotFoundException e) {
+            // Manejo de excepciones
             e.printStackTrace();
         } finally {
+            // Cerramos la conexión
             connection.cierraConexion(ps);
         }
     }

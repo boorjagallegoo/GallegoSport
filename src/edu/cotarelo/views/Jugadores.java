@@ -209,11 +209,9 @@ public class Jugadores extends javax.swing.JPanel {
     private void btn_deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_deleteActionPerformed
         JugadorDAO dao = new MySQLJugadorDAO();
         DefaultTableModel model = (DefaultTableModel) tabla_jugadores.getModel();
-        // Mostrar mensaje de alerta
         if (tabla_jugadores.getSelectedRows().length < 1) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Debes seleccionar uno o más usuarios a eliminar.\n", "AVISO", javax.swing.JOptionPane.ERROR_MESSAGE);
+            javax.swing.JOptionPane.showMessageDialog(this, "Debes seleccionar uno o más jugadores a eliminar.\n", "AVISO", javax.swing.JOptionPane.ERROR_MESSAGE);
         } else {
-            // Se recorren las filas seleccionadas en la tabla de usuarios.
             for (int i : tabla_jugadores.getSelectedRows()) {
                 try {
                     int userId = (int) tabla_jugadores.getValueAt(i, 0);
