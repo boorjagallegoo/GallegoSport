@@ -4,6 +4,7 @@ import edu.cotarelo.dao.mysql.MySQLClubDAO;
 import edu.cotarelo.dao.mysql.MySQLJugadorDAO;
 import edu.cotarelo.dao.objects.ClubDAO;
 import edu.cotarelo.dao.objects.JugadorDAO;
+import edu.cotarelo.domain.Club;
 import edu.cotarelo.fonts.Fuentes;
 import edu.cotarelo.sistema.Sistema;
 import javax.naming.NamingException;
@@ -206,17 +207,20 @@ public class AllClubes extends javax.swing.JPanel {
     }//GEN-LAST:event_btn_addActionPerformed
 
     private void btn_deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_deleteActionPerformed
-        JugadorDAO dao = new MySQLJugadorDAO();
+        ClubDAO dao = new MySQLClubDAO();  // Utiliza ClubDAO en lugar de JugadorDAO
         DefaultTableModel model = (DefaultTableModel) tabla_clubs.getModel();
+
         if (tabla_clubs.getSelectedRows().length < 1) {
             javax.swing.JOptionPane.showMessageDialog(this, "Debes seleccionar uno o más clubs a eliminar.\n", "AVISO", javax.swing.JOptionPane.ERROR_MESSAGE);
         } else {
             for (int i : tabla_clubs.getSelectedRows()) {
                 try {
-                    int userId = (int) tabla_clubs.getValueAt(i, 0);
-                    dao.eliminar(userId);
+                    String clubId = (String) tabla_clubs.getValueAt(i, 0); // Asumiendo que la columna 0 contiene el ID del club
+                    Club club = new Club();
+                    club.setIdClub(clubId);
+                    dao.borrar(club);
                     model.removeRow(i);
-                } catch (Exception e) {
+                } catch (NamingException e) {
                     System.out.println(e.getMessage());
                 }
             }
@@ -226,34 +230,24 @@ public class AllClubes extends javax.swing.JPanel {
     private void btn_editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editActionPerformed
         if (tabla_clubs.getSelectedRow() > -1) {
             try {
-                int jugadorid = (int) tabla_clubs.getValueAt(tabla_clubs.getSelectedRow(), 0);
-                JugadorDAO dao = new MySQLJugadorDAO();
-                Sistema.ShowJPanel(new RegistrarJugador(dao.getJugadorById(jugadorid)));
+                String idClub = (String) tabla_clubs.getValueAt(tabla_clubs.getSelectedRow(), 0);
+                ClubDAO dao = new MySQLClubDAO();
+                Club club = dao.getClubById(idClub);
+                if (club != null) {
+                    Sistema.ShowJPanel(new RegistrarClub(club));
+                } else {
+                    javax.swing.JOptionPane.showMessageDialog(this, "No se encontró el club con el ID: " + idClub, "AVISO", javax.swing.JOptionPane.ERROR_MESSAGE);
+                }
             } catch (NamingException e) {
                 System.out.println(e.getMessage());
             }
         } else {
-            javax.swing.JOptionPane.showMessageDialog(this, "Debes seleccionar el usuario a editar.\n", "AVISO", javax.swing.JOptionPane.ERROR_MESSAGE);
+            javax.swing.JOptionPane.showMessageDialog(this, "Debes seleccionar el club a editar.\n", "AVISO", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btn_editActionPerformed
 
     private void btn_searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_searchActionPerformed
-        /**
-         * Actualiza la tabla de jugadores en la interfaz gráfica según la
-         * búsqueda realizada.
-         *
-         * @param buscarJugadores El texto utilizado para filtrar la búsqueda de
-         * jugadores.
-         */
-        try {
-            JugadorDAO dao = new MySQLJugadorDAO();
-            DefaultTableModel model = (DefaultTableModel) tabla_clubs.getModel();
-            // Se establece el número de filas en cero para limpiar la tabla antes de agregar nuevos datos
-            model.setRowCount(0);
-            dao.listar(buscarClubs.getText()).forEach((u) -> model.addRow(new Object[]{u.getIdJugador(), u.getNombre(), u.getApellidos(), u.getPosicion()}));
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+
     }//GEN-LAST:event_btn_searchActionPerformed
 
 

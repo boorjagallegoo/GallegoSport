@@ -6,8 +6,6 @@ import edu.cotarelo.domain.Club;
 import edu.cotarelo.fonts.Fuentes;
 import java.awt.Color;
 import java.awt.HeadlessException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.naming.NamingException;
 
 public class RegistrarClub extends javax.swing.JPanel {
@@ -16,10 +14,15 @@ public class RegistrarClub extends javax.swing.JPanel {
 
     public RegistrarClub() {
         initComponents();
-        InitStyles();
+        InitStyles(false, null);
     }
 
-    private void InitStyles() {
+    RegistrarClub(Club club) {
+        initComponents();
+        InitStyles(true, club);
+    }
+
+    private void InitStyles(boolean isEdition, Club club) {
         tipoFuente = new Fuentes();
 
         title.setFont(tipoFuente.fuente(tipoFuente.roBold, 0, 22));
@@ -36,6 +39,17 @@ public class RegistrarClub extends javax.swing.JPanel {
         campoTxt.setFont(tipoFuente.fuente(tipoFuente.roRegular, 0, 12));
         btn_subir.setFont(tipoFuente.fuente(tipoFuente.roBold, 0, 18));
 
+        
+        if (isEdition) {
+            title.setText("Editar Club");
+            btn_subir.setText("Guardar");
+        // Si estamos en modo edición, se actualizan los campos de texto con los datos del jugador existente.
+            if (club != null) {
+                nameClubTxt.setText(club.getNombre());
+                descTxt.setText(club.getDescripcion());
+                campoTxt.setText(club.getCampo());
+            }
+        }
     }
 
     /**
@@ -67,8 +81,6 @@ public class RegistrarClub extends javax.swing.JPanel {
         title.setText("Alta nuevo Club");
 
         nameClubLbl.setText("Nombre");
-
-        nameClubTxt.setForeground(new java.awt.Color(204, 204, 204));
 
         descLbl.setText("Descripción");
 

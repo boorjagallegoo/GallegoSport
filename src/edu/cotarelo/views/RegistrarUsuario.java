@@ -97,14 +97,6 @@ public class RegistrarUsuario extends javax.swing.JPanel {
 
         nameLbl.setText("Nombre");
 
-        nameTxt.setForeground(new java.awt.Color(204, 204, 204));
-        nameTxt.setText("Ingrese su nombre");
-        nameTxt.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                nameTxtMousePressed(evt);
-            }
-        });
-
         apPLbl.setText("Apellidos");
 
         passLbl.setText("Contraseña");
@@ -128,14 +120,6 @@ public class RegistrarUsuario extends javax.swing.JPanel {
         rolLbl.setText("Rol");
 
         rolTxt.setToolTipText("");
-
-        passTxt.setForeground(new java.awt.Color(204, 204, 204));
-        passTxt.setText("********");
-        passTxt.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                passTxtMousePressed(evt);
-            }
-        });
 
         image.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edu/cotarelo/imagenes/registrarNewUser.png"))); // NOI18N
         image.setVerifyInputWhenFocusTarget(false);
@@ -262,29 +246,6 @@ public class RegistrarUsuario extends javax.swing.JPanel {
         }
 
     }//GEN-LAST:event_btn_registrarActionPerformed
-
-    private void nameTxtMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nameTxtMousePressed
-        if (nameTxt.getText().equals("Ingrese su nombre")) {
-            nameTxt.setText("");
-            nameTxt.setForeground(Color.black);
-        }
-        if (String.valueOf(passTxt.getPassword()).isEmpty()) {
-            passTxt.setText("********");
-            passTxt.setForeground(Color.gray);
-        }
-    }//GEN-LAST:event_nameTxtMousePressed
-
-    private void passTxtMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_passTxtMousePressed
-        if (String.valueOf(passTxt.getPassword()).equals("********")) {
-            passTxt.setText("");
-            passTxt.setForeground(Color.black);
-        }
-        if (nameTxt.getText().isEmpty()) {
-            nameTxt.setText("Ingrese su nombre");
-            nameTxt.setForeground(Color.gray);
-        }
-    }//GEN-LAST:event_passTxtMousePressed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel apPLbl;

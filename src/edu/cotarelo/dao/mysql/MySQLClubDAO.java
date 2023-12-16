@@ -60,28 +60,46 @@ public class MySQLClubDAO implements ClubDAO {
         return salida;
     }
 
+    /**
+     * Elimina un club de la base de datos según su nombre.
+     *
+     * @param club Objeto Club que contiene el nombre del club a ser eliminado.
+     * @return Un valor entero que indica el resultado de la operación: - 1 si
+     * la eliminación fue exitosa. - Otro valor si la eliminación falló.
+     * @throws NamingException Si hay un problema con la creación de la conexión
+     * a la base de datos.
+     */
     @Override
     public int borrar(Club club) throws NamingException {
         Integer salida = -1;
         PreparedStatement ps = null;
         MySQLConexionDAO connection = new MySQLConexionDAO();
+
         try {
             if (connection.abreConexion(null)) {
-                String sql = "Delete from clubs where nombre='" + club.getIdClub() + "'";
+                // Construir la consulta SQL para eliminar un club por su nombre
+                String sql = "DELETE FROM clubs WHERE nombre = ?";
                 ps = connection.pStatementGK(sql, Statement.NO_GENERATED_KEYS);
+
                 if (ps != null) {
+                    // Establecer el valor del parámetro en la consulta
+                    ps.setString(1, club.getIdClub());
+
+                    // Ejecutar la eliminación y verificar si se afectó una fila
                     int rowAffected = ps.executeUpdate();
                     if (rowAffected == 1) {
-                        salida = 1;
+                        salida = 1; // Eliminación exitosa
                     }
                 }
             }
         } catch (SQLException | ClassNotFoundException e) {
-            // TODO Auto-generated catch block
+            // Manejo de excepciones
             e.printStackTrace();
-        } finally {//cerramos la conexión
+        } finally {
+            // Cerramos la conexión
             connection.cierraConexion(ps);
         }
+
         return salida;
     }
 
@@ -286,30 +304,6 @@ public class MySQLClubDAO implements ClubDAO {
     // ====================================================================
     // ====================== by Borja Gallego ============================
     // ====================================================================
-    @Override
-    public void eliminar(int idClub) throws Exception {
-        PreparedStatement ps = null;
-        MySQLConexionDAO connection = new MySQLConexionDAO();
-
-        try {
-            if (connection.abreConexion(null)) {
-                // Consulta SQL para eliminar un jugador por su ID
-                String sql = "DELETE FROM jugadores WHERE IdJugador=?";
-                ps = connection.pStatement(sql);
-                if (ps != null) {
-                    ps.setInt(1, idClub);
-                    ps.executeUpdate();
-                }
-            }
-        } catch (SQLException | ClassNotFoundException e) {
-            // Manejo de excepciones
-            e.printStackTrace();
-        } finally {
-            // Cerramos la conexión
-            connection.cierraConexion(ps);
-        }
-    }
-
     @Override
     public List<Club> listar() throws Exception {
         // Recupera de BBDD la lista de clubs

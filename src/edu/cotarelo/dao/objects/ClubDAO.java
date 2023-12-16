@@ -23,6 +23,4 @@ public interface ClubDAO {
     // ====================================================================
     public List<Club> listar() throws Exception;
 
-    public void eliminar(int idClub) throws Exception;
-
 }
