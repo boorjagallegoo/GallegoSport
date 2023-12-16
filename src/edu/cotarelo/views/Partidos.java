@@ -1,6 +1,9 @@
 package edu.cotarelo.views;
 
+import edu.cotarelo.dao.mysql.MySQLPartidoDAO;
+import edu.cotarelo.dao.objects.PartidoDAO;
 import edu.cotarelo.fonts.Fuentes;
+import javax.swing.table.DefaultTableModel;
 
 public class Partidos extends javax.swing.JPanel {
 
@@ -9,6 +12,17 @@ public class Partidos extends javax.swing.JPanel {
     public Partidos() {
         initComponents();
         InitStyles();
+        LoadPartidos();
+    }
+
+    private void LoadPartidos() {
+         try {
+            PartidoDAO dao = new MySQLPartidoDAO();
+            DefaultTableModel model = (DefaultTableModel) tabla_partidos.getModel();
+            dao.listar().forEach((u) -> model.addRow(new Object[]{u.getIdClub1(), u.getIdClub2(), u.getfecha()}));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private void InitStyles() {
@@ -147,7 +161,7 @@ public class Partidos extends javax.swing.JPanel {
     }//GEN-LAST:event_tabla_partidosInputMethodTextChanged
 
     private void btn_crearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_crearActionPerformed
-       
+
     }//GEN-LAST:event_btn_crearActionPerformed
 
     private void btn_actuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_actuActionPerformed
@@ -163,4 +177,5 @@ public class Partidos extends javax.swing.JPanel {
     private javax.swing.JTable tabla_partidos;
     private javax.swing.JLabel title;
     // End of variables declaration//GEN-END:variables
+
 }

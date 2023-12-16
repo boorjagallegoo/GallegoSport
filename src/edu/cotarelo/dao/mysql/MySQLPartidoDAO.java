@@ -268,7 +268,40 @@ public class MySQLPartidoDAO implements PartidoDAO {
     
     @Override
     public List<Partido> listar() throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        // Recupera la lista de partidos
+        List<Partido> lista = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        MySQLConexionDAO connection = new MySQLConexionDAO();
+
+        try {
+            if (connection.abreConexion(null)) {
+                String sql = "SELECT * FROM partidos";
+                ps = connection.pStatement(sql);
+                rs = ps.executeQuery();
+
+                while (rs.next()) {
+                    Partido partido = new Partido();
+                    Club club1 = new Club();
+                    club1.setIdClub(rs.getString("IdClub1"));
+                    club1.setNombre(rs.getString("IdClub1"));
+                    Club club2 = new Club();
+                    club2.setIdClub(rs.getString("IdClub2"));
+                    club2.setNombre(rs.getString("IdClub2"));
+                    partido.setIdClub1(club1);
+                    partido.setIdClub2(club2);
+                    lista.add(partido);
+                }
+            }
+        } catch (SQLException | ClassNotFoundException | NamingException e) {
+            // Manejo de excepciones
+            e.printStackTrace();
+        } finally {
+            // Cerramos la conexión
+            connection.cierraConexion(ps);
+        }
+
+        return lista;
     }
 
     @Override
