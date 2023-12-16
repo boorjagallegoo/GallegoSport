@@ -4,6 +4,7 @@ import edu.cotarelo.dao.mysql.MySQLJugadorDAO;
 import edu.cotarelo.dao.objects.JugadorDAO;
 import edu.cotarelo.fonts.Fuentes;
 import edu.cotarelo.sistema.Sistema;
+import javax.naming.NamingException;
 import javax.swing.table.DefaultTableModel;
 
 public class Jugadores extends javax.swing.JPanel {
@@ -202,7 +203,7 @@ public class Jugadores extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addActionPerformed
-        Sistema.ShowJPanel(new RegistarJugador());
+        Sistema.ShowJPanel(new RegistrarJugador());
     }//GEN-LAST:event_btn_addActionPerformed
 
     private void btn_deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_deleteActionPerformed
@@ -226,7 +227,17 @@ public class Jugadores extends javax.swing.JPanel {
     }//GEN-LAST:event_btn_deleteActionPerformed
 
     private void btn_editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editActionPerformed
-
+        if (tabla_jugadores.getSelectedRow() > -1) {
+            try {
+                int jugadorid = (int) tabla_jugadores.getValueAt(tabla_jugadores.getSelectedRow(), 0);
+                JugadorDAO dao = new MySQLJugadorDAO();
+                Sistema.ShowJPanel(new RegistrarJugador(dao.getJugadorById(jugadorid)));
+            } catch (NamingException e) {
+                System.out.println(e.getMessage());
+            }
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Debes seleccionar el usuario a editar.\n", "AVISO", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btn_editActionPerformed
 
     private void btn_searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_searchActionPerformed

@@ -7,16 +7,21 @@ import java.awt.Color;
 import java.awt.HeadlessException;
 import javax.naming.NamingException;
 
-public class RegistarJugador extends javax.swing.JPanel {
+public class RegistrarJugador extends javax.swing.JPanel {
 
     Fuentes tipoFuente;
 
-    public RegistarJugador() {
+    public RegistrarJugador() {
         initComponents();
-        InitStyles();
+        InitStyles(false, null);
+    }
+    
+     public RegistrarJugador(edu.cotarelo.domain.Jugador jugador) {
+        initComponents();
+        InitStyles(true, jugador);
     }
 
-    private void InitStyles() {
+    private void InitStyles(boolean isEdition, edu.cotarelo.domain.Jugador jugador) {
         tipoFuente = new Fuentes();
 
         title.setFont(tipoFuente.fuente(tipoFuente.roBold, 0, 22));
@@ -32,6 +37,17 @@ public class RegistarJugador extends javax.swing.JPanel {
         apPTxt.setFont(tipoFuente.fuente(tipoFuente.roRegular, 0, 12));
         posiTxt.setFont(tipoFuente.fuente(tipoFuente.roRegular, 0, 12));
         btn_registrar.setFont(tipoFuente.fuente(tipoFuente.roBold, 0, 18));
+        
+        if (isEdition) {
+            title.setText("Editar Jugador");
+            btn_registrar.setText("Guardar");
+
+            if (jugador != null) {
+                nameTxt.setText(jugador.getNombre());
+                apPTxt.setText(jugador.getApellidos());
+                posiTxt.setText(jugador.getPosicion());
+            }
+        }
     }
 
     @SuppressWarnings("unchecked")
