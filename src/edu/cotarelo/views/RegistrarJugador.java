@@ -2,6 +2,7 @@ package edu.cotarelo.views;
 
 import edu.cotarelo.dao.mysql.MySQLJugadorDAO;
 import edu.cotarelo.dao.objects.JugadorDAO;
+import edu.cotarelo.domain.Jugador;
 import edu.cotarelo.fonts.Fuentes;
 import java.awt.Color;
 import java.awt.HeadlessException;
@@ -9,19 +10,23 @@ import javax.naming.NamingException;
 
 public class RegistrarJugador extends javax.swing.JPanel {
 
+    boolean isEdition = false; // Variable que indica si la aplicación se encuentra en modo de edición.
+    Jugador playerEdition; // Variable que indica si la aplicación se encuentra en modo de edición.
     Fuentes tipoFuente;
 
     public RegistrarJugador() {
         initComponents();
-        InitStyles(false, null);
-    }
-    
-     public RegistrarJugador(edu.cotarelo.domain.Jugador jugador) {
-        initComponents();
-        InitStyles(true, jugador);
+        InitStyles();
     }
 
-    private void InitStyles(boolean isEdition, edu.cotarelo.domain.Jugador jugador) {
+    public RegistrarJugador(Jugador jugador) {
+        initComponents();
+        isEdition = true;
+        playerEdition = jugador;
+        InitStyles();
+    }
+
+    private void InitStyles() {
         tipoFuente = new Fuentes();
 
         title.setFont(tipoFuente.fuente(tipoFuente.roBold, 0, 22));
@@ -37,15 +42,15 @@ public class RegistrarJugador extends javax.swing.JPanel {
         apPTxt.setFont(tipoFuente.fuente(tipoFuente.roRegular, 0, 12));
         posiTxt.setFont(tipoFuente.fuente(tipoFuente.roRegular, 0, 12));
         btn_registrar.setFont(tipoFuente.fuente(tipoFuente.roBold, 0, 18));
-        
+
         if (isEdition) {
             title.setText("Editar Jugador");
             btn_registrar.setText("Guardar");
-
-            if (jugador != null) {
-                nameTxt.setText(jugador.getNombre());
-                apPTxt.setText(jugador.getApellidos());
-                posiTxt.setText(jugador.getPosicion());
+        // Si estamos en modo edición, se actualizan los campos de texto con los datos del jugador existente.
+            if (playerEdition != null) {
+                nameTxt.setText(playerEdition.getNombre());
+                apPTxt.setText(playerEdition.getApellidos());
+                posiTxt.setText(playerEdition.getPosicion());
             }
         }
     }
@@ -158,7 +163,7 @@ public class RegistrarJugador extends javax.swing.JPanel {
             .addComponent(bg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
- 
+
     private void btn_registrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_registrarActionPerformed
         String nombre = nameTxt.getText();
         String ap = apPTxt.getText();
@@ -171,22 +176,31 @@ public class RegistrarJugador extends javax.swing.JPanel {
             return;
         }
 
-        edu.cotarelo.domain.Jugador jugador = new edu.cotarelo.domain.Jugador();
+        // Si isEdition es verdadero, asigna playerEdition a jugador; si es falso, asigna una nueva instancia de Jugador.
+        Jugador jugador = isEdition ? playerEdition : new edu.cotarelo.domain.Jugador();
         jugador.setNombre(nombre);
         jugador.setApellidos(ap);
         jugador.setPosicion(posi);
 
         try {
             JugadorDAO dao = new MySQLJugadorDAO();
-            dao.insertar(jugador);
+            // Si no estamos en modo edición, se inserta el jugador usando dao.insertar(); de lo contrario, se modifica usando dao.modificar().
+            if (!isEdition) {
+                dao.insertar(jugador);
+            } else {
+                dao.modificar(jugador);
+            }
 
-            javax.swing.JOptionPane.showMessageDialog(this, "Usuario registrado exitosamente. \n", "AVISO", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            String successMsg = isEdition ? "modificado" : "registrado";
+
+            javax.swing.JOptionPane.showMessageDialog(this, "Jugador " + successMsg + " exitosamente. \n", "AVISO", javax.swing.JOptionPane.INFORMATION_MESSAGE);
 
             nameTxt.setText("");
             apPTxt.setText("");
             posiTxt.setText("");
         } catch (HeadlessException | NamingException e) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Ocurrió un error al registrar el usuario. \n", "AVISO", javax.swing.JOptionPane.ERROR_MESSAGE);
+            String errorMsg = isEdition ? "modificar" : "registrar";
+            javax.swing.JOptionPane.showMessageDialog(this, "Ocurrió un error al " + errorMsg + " el jugador. \n", "AVISO", javax.swing.JOptionPane.ERROR_MESSAGE);
             System.out.println(e.getMessage());
         }
     }//GEN-LAST:event_btn_registrarActionPerformed
