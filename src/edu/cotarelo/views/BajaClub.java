@@ -62,11 +62,21 @@ public class BajaClub extends javax.swing.JPanel {
 
         jugadorNombreTxt.setForeground(new java.awt.Color(204, 204, 204));
         jugadorNombreTxt.setText("Ingrese su nombre");
+        jugadorNombreTxt.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jugadorNombreTxtMousePressed(evt);
+            }
+        });
 
         clubNombreLbl.setText("Club");
 
         clubNombreTxt.setForeground(new java.awt.Color(204, 204, 204));
         clubNombreTxt.setText("Ingrese su club");
+        clubNombreTxt.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                clubNombreTxtMousePressed(evt);
+            }
+        });
 
         btn_baja.setBackground(new java.awt.Color(18, 90, 173));
         btn_baja.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -74,11 +84,6 @@ public class BajaClub extends javax.swing.JPanel {
         btn_baja.setText("Baja");
         btn_baja.setBorderPainted(false);
         btn_baja.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btn_baja.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_bajaActionPerformed(evt);
-            }
-        });
 
         image.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         image.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edu/cotarelo/imagenes/bajaLesion.jpeg"))); // NOI18N
@@ -136,9 +141,27 @@ public class BajaClub extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btn_bajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_bajaActionPerformed
+    private void jugadorNombreTxtMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jugadorNombreTxtMousePressed
+        if (jugadorNombreTxt.getText().equals("Ingrese su nombre")) {
+            jugadorNombreTxt.setText("");
+            jugadorNombreTxt.setForeground(Color.black);
+        }
+        if (clubNombreTxt.getText().isEmpty()) {
+            clubNombreTxt.setText("Ingrese su club");
+            clubNombreTxt.setForeground(Color.gray);
+        }
+    }//GEN-LAST:event_jugadorNombreTxtMousePressed
 
-    }//GEN-LAST:event_btn_bajaActionPerformed
+    private void clubNombreTxtMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_clubNombreTxtMousePressed
+         if (clubNombreTxt.getText().equals("Ingrese su club")) {
+            clubNombreTxt.setText("");
+            clubNombreTxt.setForeground(Color.black);
+        }
+        if (jugadorNombreTxt.getText().isEmpty()) {
+            jugadorNombreTxt.setText("Ingrese su nombre");
+            jugadorNombreTxt.setForeground(Color.gray);
+        }
+    }//GEN-LAST:event_clubNombreTxtMousePressed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel bg;
