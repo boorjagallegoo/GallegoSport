@@ -221,9 +221,11 @@ public class RegistrarUsuario extends javax.swing.JPanel {
         try {
             UsuarioDAO dao = new MySQLUsuarioDAO();
 
+            // Si no está en modo de edición, se realiza una inserción
             if (!isEdition) {
                 dao.insertar(user);
             } else {
+                // Si está en modo de edición, se realiza una modificación
                 dao.modificar(user);
             }
 

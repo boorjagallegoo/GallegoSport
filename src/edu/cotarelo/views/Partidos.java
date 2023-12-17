@@ -15,12 +15,26 @@ public class Partidos extends javax.swing.JPanel {
         LoadPartidos();
     }
 
+    /**
+     * Carga la información de los partidos desde la base de datos y los muestra en la tabla de partidos.
+     */
     private void LoadPartidos() {
-         try {
+        try {
+            // Se obtiene una instancia del DAO de Partido utilizando la implementación MySQL
             PartidoDAO dao = new MySQLPartidoDAO();
+
+            // Se obtiene el modelo de la tabla de partidos
             DefaultTableModel model = (DefaultTableModel) tabla_partidos.getModel();
-            dao.listar().forEach((u) -> model.addRow(new Object[]{u.getIdClub1(), u.getIdClub2(), u.getfecha()}));
+
+            // Se limpian las filas existentes en la tabla antes de cargar nuevos datos
+            model.setRowCount(0);
+
+            // Se realiza la carga de partidos desde la base de datos y se agregan al modelo de la tabla
+            dao.listar().forEach((u)
+                    -> model.addRow(new Object[]{u.getIdClub1(), u.getIdClub2(), u.getfecha()})
+            );
         } catch (Exception e) {
+            // Maneja cualquier excepción e imprime el mensaje de error en la consola
             System.out.println(e.getMessage());
         }
     }
@@ -92,11 +106,6 @@ public class Partidos extends javax.swing.JPanel {
         btn_actu.setText("Actualizar");
         btn_actu.setBorderPainted(false);
         btn_actu.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        btn_actu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_actuActionPerformed(evt);
-            }
-        });
 
         btn_crear.setBackground(new java.awt.Color(18, 90, 173));
         btn_crear.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -104,11 +113,6 @@ public class Partidos extends javax.swing.JPanel {
         btn_crear.setText("Crear");
         btn_crear.setBorderPainted(false);
         btn_crear.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        btn_crear.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_crearActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout backgroundLayout = new javax.swing.GroupLayout(background);
         background.setLayout(backgroundLayout);
@@ -159,14 +163,6 @@ public class Partidos extends javax.swing.JPanel {
     private void tabla_partidosInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_tabla_partidosInputMethodTextChanged
         //nothing
     }//GEN-LAST:event_tabla_partidosInputMethodTextChanged
-
-    private void btn_crearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_crearActionPerformed
-
-    }//GEN-LAST:event_btn_crearActionPerformed
-
-    private void btn_actuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_actuActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btn_actuActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
