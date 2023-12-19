@@ -312,10 +312,10 @@ public class Login extends javax.swing.JFrame {
 
                 // Muestra un mensaje según el resultado de la validación
                 if (elUser == null) {
-                    JOptionPane.showMessageDialog(null, "Usuario incorrecto.");
+                    JOptionPane.showMessageDialog(this, "Usuario incorrecto.\n", "ERROR", JOptionPane.ERROR_MESSAGE);
                 } else {
                     // Si las credenciales son correctas, pasa a la siguiente pantalla
-                    JOptionPane.showMessageDialog(null, "Autentificado como: " + elUser.getNombre());
+                    JOptionPane.showMessageDialog(this, "Autentificado como: " + elUser.getNombre(), "AVISO", JOptionPane.INFORMATION_MESSAGE);
 
                     // Código para pasar a la siguiente pantalla (ajusta según tu implementación)
                     Sistema sistema = new Sistema();
