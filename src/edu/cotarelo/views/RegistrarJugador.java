@@ -88,7 +88,7 @@ public class RegistrarJugador extends javax.swing.JPanel {
         jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
         jSeparator1.setPreferredSize(new java.awt.Dimension(200, 10));
 
-        image.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edu/cotarelo/imagenes/PPPP.png"))); // NOI18N
+        image.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edu/cotarelo/imagenes/registrarNewJugador.png"))); // NOI18N
         image.setVerifyInputWhenFocusTarget(false);
 
         btn_registrar.setBackground(new java.awt.Color(18, 90, 173));

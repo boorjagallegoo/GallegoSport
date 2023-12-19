@@ -69,7 +69,7 @@ public class Login extends javax.swing.JFrame {
         background.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         logoImagen.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        logoImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edu/cotarelo/imagenes/NEWWww.png"))); // NOI18N
+        logoImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edu/cotarelo/imagenes/useMessi.png"))); // NOI18N
         logoImagen.setMaximumSize(new java.awt.Dimension(200, 200));
         logoImagen.setMinimumSize(new java.awt.Dimension(200, 200));
         logoImagen.setPreferredSize(new java.awt.Dimension(200, 200));

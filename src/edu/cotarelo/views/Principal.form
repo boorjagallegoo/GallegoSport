@@ -154,7 +154,7 @@
           <Properties>
             <Property name="horizontalAlignment" type="int" value="4"/>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/edu/cotarelo/imagenes/iconoJugadorFutbol.png"/>
+              <Image iconType="3" name="/edu/cotarelo/imagenes/JugadorFutbol.png"/>
             </Property>
           </Properties>
         </Component>

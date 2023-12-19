@@ -73,7 +73,7 @@ public class Principal extends javax.swing.JPanel {
         bg.setBackground(new java.awt.Color(255, 255, 255));
 
         image.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        image.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edu/cotarelo/imagenes/iconoJugadorFutbol.png"))); // NOI18N
+        image.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edu/cotarelo/imagenes/JugadorFutbol.png"))); // NOI18N
 
         title.setText("Bienvenido");
 

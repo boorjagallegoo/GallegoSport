@@ -342,7 +342,7 @@
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/edu/cotarelo/imagenes/Porteria.png"/>
+                  <Image iconType="3" name="/edu/cotarelo/imagenes/Btn_Porteria.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Todos los Clubs"/>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">

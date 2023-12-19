@@ -238,7 +238,7 @@ public class Sistema extends javax.swing.JFrame {
         btn_allClubes.setBackground(new java.awt.Color(21, 101, 192));
         btn_allClubes.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         btn_allClubes.setForeground(new java.awt.Color(255, 255, 255));
-        btn_allClubes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edu/cotarelo/imagenes/Porteria.png"))); // NOI18N
+        btn_allClubes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edu/cotarelo/imagenes/Btn_Porteria.png"))); // NOI18N
         btn_allClubes.setText("Todos los Clubs");
         btn_allClubes.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 13, 1, 1, new java.awt.Color(0, 0, 0)));
         btn_allClubes.setBorderPainted(false);
