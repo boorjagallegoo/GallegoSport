@@ -12,6 +12,7 @@ import javax.naming.NamingException;
 import edu.cotarelo.dao.objects.PartidoDAO;
 import edu.cotarelo.domain.Club;
 import edu.cotarelo.domain.Partido;
+import java.util.Date;
 import java.util.List;
 
 public class MySQLPartidoDAO implements PartidoDAO {
@@ -167,10 +168,16 @@ public class MySQLPartidoDAO implements PartidoDAO {
         return salida;
     }
 
+    /**
+     * Implementación de la interfaz que proporciona métodos para obtener la
+     * lista de partidos.
+     */
     @Override
     public ArrayList<Partido> getlistaPartidos() {
-        /*	recupera la lista de jugadores
-		 * 	Todos | jugadores sinclub
+        /**
+         * Recupera la lista de partidos desde la base de datos.
+         *
+         * @return ArrayList<Partido> Lista de partidos.
          */
         ArrayList<Partido> lista = new ArrayList<Partido>();
         PreparedStatement ps = null;
@@ -191,11 +198,12 @@ public class MySQLPartidoDAO implements PartidoDAO {
                     club2.setNombre(rs.getString("IdClub2"));
                     partido.setIdClub1(club1);
                     partido.setIdClub2(club2);
+                    Date fecha = rs.getDate("fecha");
+                    partido.setfecha(fecha);
                     lista.add(partido);
                 }
             }
         } catch (SQLException | ClassNotFoundException | NamingException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {//cerramos la conexión
             connection.cierraConexion(ps);
@@ -265,7 +273,6 @@ public class MySQLPartidoDAO implements PartidoDAO {
     // ====================================================================
     // ====================== by Borja Gallego ============================
     // ====================================================================
-    
     @Override
     public List<Partido> listar() throws Exception {
         // Recupera la lista de partidos

@@ -1,8 +1,10 @@
 package edu.cotarelo.views;
 
-import edu.cotarelo.dao.mysql.MySQLPartidoDAO;
+import edu.cotarelo.dao.factories.MySQLFactory;
 import edu.cotarelo.dao.objects.PartidoDAO;
+import edu.cotarelo.domain.Partido;
 import edu.cotarelo.fonts.Fuentes;
+import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 
 public class Partidos extends javax.swing.JPanel {
@@ -16,12 +18,14 @@ public class Partidos extends javax.swing.JPanel {
     }
 
     /**
-     * Carga la información de los partidos desde la base de datos y los muestra en la tabla de partidos.
+     * Carga la información de los partidos desde la base de datos y los muestra
+     * en la tabla de partidos.
      */
     private void LoadPartidos() {
         try {
             // Se obtiene una instancia del DAO de Partido utilizando la implementación MySQL
-            PartidoDAO dao = new MySQLPartidoDAO();
+            MySQLFactory factoria = new MySQLFactory();
+            PartidoDAO partidoDAO = factoria.getPartidoDAO();
 
             // Se obtiene el modelo de la tabla de partidos
             DefaultTableModel model = (DefaultTableModel) tabla_partidos.getModel();
@@ -30,9 +34,16 @@ public class Partidos extends javax.swing.JPanel {
             model.setRowCount(0);
 
             // Se realiza la carga de partidos desde la base de datos y se agregan al modelo de la tabla
-            dao.listar().forEach((u)
-                    -> model.addRow(new Object[]{u.getIdClub1(), u.getIdClub2(), u.getfecha()})
-            );
+            ArrayList<Partido> lista = partidoDAO.getlistaPartidos();
+            if (lista == null || lista.isEmpty()) {
+                // Manejar el caso en que no hay partidos en la base de datos
+                //  partidoRespuesta.setForeground(Color.blue);
+                //  partidoRespuesta.setText("No hay partidos en BBDD.");
+            } else {
+                lista.forEach((partido)
+                        -> model.addRow(new Object[]{partido.getIdClub1().getIdClub(), partido.getIdClub2().getIdClub(), partido.getfecha()})
+                );
+            }
         } catch (Exception e) {
             // Maneja cualquier excepción e imprime el mensaje de error en la consola
             System.out.println(e.getMessage());
