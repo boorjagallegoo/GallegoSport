@@ -1,5 +1,5 @@
 # GallegoSport
-Sistema básico para gestionar un club polideportivo en Java. Es un proyecto escolar que realicé para la programación orientada a objetos. Programado en Java.
+Sistema básico para la gestión de un Club Polideportivo en Java. Es un proyecto escolar que realicé para la programación orientada a objetos en la asignatura de Desarrollo de Interfaces. Programado en Java.
 
 ## Características
 ✔️ Interfaz gráfica con estilo de Material Design.
